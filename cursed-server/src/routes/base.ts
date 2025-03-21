@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import logger from '../logger';
 import { ServerError } from '../types/server_error';
+import { RestResult, makeRestResult, makeErrorResult } from '../types/rest';
 
 interface ValidationSchema {
   type: string;
