@@ -1,9 +1,24 @@
 # cursed-stack-kettleman
-Kettleman Stack - Frontend: React + Bun + Mantine + Vite - Backend: Bun + Prisma + Postgres + Influx
+
+A modern full-stack application built with cutting-edge technologies.
+
+## Stack Components
+
+### Frontend (cursed-web)
+- React
+- Bun
+- Mantine UI
+- Vite
+
+### Backend (cursed-server)
+- Bun
+- Prisma
+- PostgreSQL
+- InfluxDB
 
 ## Development Setup
 
-### Using Devcontainer
+### Using Devcontainer (Recommended)
 
 This project includes a devcontainer configuration for Visual Studio Code and GitHub Codespaces. This provides a consistent development environment with all required dependencies pre-installed.
 
@@ -42,8 +57,37 @@ If you prefer to set up manually:
    moon run :install
    ```
 
-## PORTS (temp notes)
-Base is 4150
+## Project Structure
+
+```
+cursed-stack-kettleman/
+├── cursed-server/     # Backend server
+├── cursed-web/        # Frontend application
+├── docker/            # Docker configurations
+├── scripts/          # Utility scripts
+└── .moon/            # Moon workspace configuration
+```
+
+## Available Commands
+
+### Global Commands (run from root)
+- `moon run :install` - Install dependencies for all projects
+- `moon run :build` - Build all projects
+- `moon run :test` - Run tests for all projects
+
+### Backend Commands (cursed-server)
+- `moon run cursed-server:dev` - Start the development server
+- `moon run cursed-server:docker-dev` - Start the server in Docker with dependencies
+- `moon run cursed-server:docker-build` - Build the server Docker image
+
+### Frontend Commands (cursed-web)
+- `moon run cursed-web:dev` - Start the development server
+- `moon run cursed-web:build` - Build the production bundle
+- `moon run cursed-web:docker-build` - Build the web Docker image
+
+## Service Ports
+
+Base port is 4150
 
 | Port | Internal Port | Container | Description |
 |------|--------------|-----------|-------------|
@@ -59,8 +103,26 @@ Base is 4150
 | 4159 | 6060 | query-service | SigNoz Query Service |
 | 4160 | 3301 | frontend | SigNoz Frontend |
 
-## Auth Notes
+## Authentication Details
 
-- Username: cursed_{service_name}
-- Password: VictoryFor{ServiceName}
-- DB/Service Name: cursed
+Default service credentials follow this pattern:
+- Username: `cursed_{service_name}`
+- Password: `VictoryFor{ServiceName}`
+- DB/Service Name: `cursed`
+
+For example, for PostgreSQL:
+- Username: `cursed_postgres`
+- Password: `VictoryForPostgres`
+- Database: `cursed`
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the terms found in the LICENSE file.
