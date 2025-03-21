@@ -25,3 +25,4 @@ tasks:
     - 'compose-full:influxdb'
     env:
       DATABASE_URL: 'postgresql://cursed_postgres:VictoryForPostgres@localhost:4152/cursed'
+    

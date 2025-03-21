@@ -65,6 +65,7 @@ cursed-stack-kettleman/
 ├── cursed-web/        # Frontend application
 ├── docker/            # Docker configurations
 ├── scripts/          # Utility scripts
+├── .github/          # GitHub Actions workflows
 └── .moon/            # Moon workspace configuration
 ```
 
@@ -84,6 +85,26 @@ cursed-stack-kettleman/
 - `moon run cursed-web:dev` - Start the development server
 - `moon run cursed-web:build` - Build the production bundle
 - `moon run cursed-web:docker-build` - Build the web Docker image
+
+### Docker Commands
+- `moon run compose-full:up` - Start all services with Docker Compose
+- `moon run compose-full:down` - Stop all services
+- `moon run compose-full:logs` - View logs from all services
+
+## CI/CD with GitHub Actions
+
+This project uses GitHub Actions for continuous integration and deployment. The following workflows are available:
+
+### Continuous Integration
+- **CI**: Runs tests and builds for all projects
+- **Code Coverage**: Generates and uploads test coverage reports
+
+### Docker & Deployment
+- **Docker Build & Publish**: Builds and publishes Docker images to GitHub Container Registry
+- **Docker Compose**: Verifies Docker Compose setup
+- **Dev Container**: Builds and publishes the development container
+
+See the [Docker README](docker/README.md) for more details on containerization and CI/CD.
 
 ## Service Ports
 

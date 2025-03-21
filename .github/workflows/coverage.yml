@@ -1,0 +1,41 @@
+name: Code Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Proto
+        uses: moonrepo/setup-proto@v1
+        
+      - name: Install Moon
+        run: proto install moon
+        
+      - name: Install Bun
+        run: proto install bun
+        
+      - name: Install dependencies
+        run: moon run :install
+        
+      - name: Generate coverage for server
+        run: moon run cursed-server:coverage
+        
+      - name: Generate coverage for web
+        run: moon run cursed-web:coverage
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./cursed-server/coverage/lcov.info,./cursed-web/coverage/lcov.info
+          flags: server,web
+          fail_ci_if_error: true 

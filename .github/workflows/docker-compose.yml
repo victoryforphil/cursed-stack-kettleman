@@ -1,0 +1,35 @@
+name: Docker Compose
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  docker-compose-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Proto
+        uses: moonrepo/setup-proto@v1
+        
+      - name: Install Moon
+        run: proto install moon
+        
+      - name: Install dependencies
+        run: moon run :install
+        
+      - name: Build projects
+        run: moon run :build
+        
+      - name: Run Docker Compose builds
+        run: moon run --tag=docker-compose 
