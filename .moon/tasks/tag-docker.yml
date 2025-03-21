@@ -1,0 +1,12 @@
+$schema: 'https://moonrepo.dev/schemas/tasks.json'
+fileGroups:
+  docker:
+  - 'Dockerfile'
+
+tasks:
+  docker-build:
+    script: 'docker build -t @meta(tag):latest -f @files(docker) .'
+    options:
+      runFromWorkspaceRoot: true
+    inputs:
+    - '@files(docker)'

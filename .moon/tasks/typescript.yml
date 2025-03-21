@@ -16,6 +16,14 @@ fileGroups:
   - 'public/**/*'
 
 tasks:
+  install:
+    command: 'bun install'
+    inputs:
+    - '@globs(typescript)'
+    - '@globs(configs)'
+    options:
+      mergeDeps: append
+
   typecheck:
     command: 'bun run tsc'
     inputs:

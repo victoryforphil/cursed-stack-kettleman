@@ -4,37 +4,16 @@ type: 'application'
 project:
   name: 'cursed-server'
   description: 'Server for cursed'
+  metadata:
+    tag: 'cursed-server'
 
-$schema: 'https://moonrepo.dev/schemas/tasks.json'
+tags:
+- 'prisma'
+- 'docker'
 
 tasks:
-  prisma-generate:
-    command: 'bunx prisma generate'
-
-  prisma-migrate:
-    command: 'bunx prisma migrate dev'
-
-  prisma-db-push:
-    command: 'bunx prisma db push'
-
-  prisma-studio:
-    command: 'bunx prisma studio'
-
-  install:
-    command: 'bun install'
-    deps:
-    - '~:prisma-generate'
-
-  dev:
-    command: 'bun run dev'
+  entrypoint:
+    command: './scripts/entrypoint.sh'
+    toolchain: 'system'
     deps:
     - '~:install'
-    options:
-      cache: false
-
-  test:
-    command: 'bun test'
-    inputs:
-    - '@globs(typescript)'
-    options:
-      runInCI: true

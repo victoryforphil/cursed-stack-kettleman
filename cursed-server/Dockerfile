@@ -1,27 +1,37 @@
-FROM oven/bun:1.0.30 as builder
+FROM ubuntu:22.04 as builder
 
 WORKDIR /app
 
 # Copy package files and dependencies and workspace
-COPY cursed-server /app
+COPY ./cursed-server /app/cursed-server
+COPY ./scripts /app/scripts
+COPY ./.moon /app/.moon
+
+RUN ls -la
 
 # Install dependencies
-RUN cd /app && ./scripts/install_proto.sh
 
-RUN cd /app && ./scripts/install_moon.sh
+# Install PostgreSQL client tools
+RUN apt update && \
+    apt install -y postgresql-client && \
+    apt install -y wget curl git unzip gzip xz-utils build-essential && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+    
+RUN /app/scripts/install_proto.sh
+
+# Save /root/.proto/bin/proto to PATH
+ENV PATH="/root/.proto/bin:$PATH"
+RUN /app/scripts/install_moon.sh
+
+RUN proto install bun
 
 RUN cd /app && moon :install
 
 # Build final image
 FROM oven/bun:1.0.30 as runner
 
-# Install PostgreSQL client tools
-RUN apt-get update && \
-    apt-get install -y postgresql-client && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy from builder
 COPY --from=builder /app /app
@@ -29,11 +39,10 @@ COPY --from=builder /app /app
 # Expose the port your app runs on
 EXPOSE 3030
 
-
 # Set environment variables
 ENV NODE_ENV=production
 
-RUN chmod +x /usr/src/app/scripts/entrypoint.sh
+RUN chmod +x /app/cursed-server/scripts/entrypoint.sh
 
 # Start the application
-CMD ["/usr/src/app/scripts/entrypoint.sh"] 
+CMD ["/app/cursed-server/scripts/entrypoint.sh"] 
