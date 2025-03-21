@@ -1,0 +1,30 @@
+{
+  "name": "cursed-server",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "bun test",
+    "dev": "bun run --watch src/index.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:db:push": "prisma db push",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@elysiajs/cookie": "^0.8.0",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/eden": "^1.2.0",
+    "@elysiajs/jwt": "^1.2.0",
+    "@elysiajs/opentelemetry": "^1.1.0",
+    "@elysiajs/swagger": "^1.2.2",
+    "@google-cloud/storage": "^7.15.1",
+    "@prisma/client": "^6.4.1",
+    "adze": "^2.2.1",
+    "elysia": "latest",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prisma": "^6.4.1"
+  },
+  "module": "src/index.js"
+}
