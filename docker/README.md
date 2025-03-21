@@ -56,30 +56,46 @@ GitHub Actions workflows automate the build, test, and deployment processes.
 ### Available Workflows
 
 #### CI (ci.yml)
-- Triggered on pushes to main and pull requests
+- Triggered on pushes to main and all pull request activities
 - Runs tests and builds for all projects
 - Uses Proto and Moon for toolchain management
 
 #### Docker Compose (docker-compose.yml)
-- Triggered on pushes to main and pull requests
+- Triggered on pushes to main and all pull request activities
 - Builds all projects and runs Docker Compose builds
 - Uses the tag 'docker-compose' to identify relevant tasks
 
 #### Docker Build & Publish (docker-build.yml)
-- Triggered on pushes to main and tag pushes (v*)
-- Builds and publishes Docker images for both server and web
-- Publishes to GitHub Container Registry (ghcr.io)
+- Triggered on pushes to main, tag pushes (v*), and all pull request activities
+- Builds Docker images for both server and web
+- Publishes to GitHub Container Registry (ghcr.io) for non-PR events
 - Tags images with version and 'latest'
 
 #### Dev Container (devcontainer.yml)
-- Triggered on pushes to main when .devcontainer files change
-- Builds and publishes the development container
-- Publishes to GitHub Container Registry (ghcr.io)
+- Triggered on pushes to main and PRs when .devcontainer files change
+- Builds the development container
+- Publishes to GitHub Container Registry (ghcr.io) for non-PR events
 
 #### Code Coverage (coverage.yml)
-- Triggered on pushes to main and pull requests
+- Triggered on pushes to main and all pull request activities
 - Generates code coverage reports for server and web
 - Uploads coverage reports to Codecov
+- Adds coverage summary comment to pull requests
+
+### Pull Request Handling
+
+All workflows are now configured with simplified triggers to ensure they run on any pull request:
+- No type filters: works with all PR events (open, synchronize, close, etc.)
+- No branch filters on PRs: runs on all PRs regardless of target branch
+- Streamlined configuration to avoid GitHub Actions compatibility issues
+
+This ensures maximum compatibility across different PR workflows, including forks.
+
+### Security Considerations
+
+- Workflows use appropriate permissions scoping for GitHub Actions
+- Secrets are only used in non-PR contexts for publishing
+- PRs from forks are properly handled with security restrictions
 
 ### Image Tagging Strategy
 

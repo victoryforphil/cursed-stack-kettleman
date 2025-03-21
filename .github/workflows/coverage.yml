@@ -4,7 +4,10 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write  # Needed to comment coverage results on PRs
 
 jobs:
   coverage:
@@ -33,9 +36,24 @@ jobs:
         run: moon run cursed-web:coverage
         
       - name: Upload coverage to Codecov
+        id: codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./cursed-server/coverage/lcov.info,./cursed-web/coverage/lcov.info
           flags: server,web
-          fail_ci_if_error: true 
+          fail_ci_if_error: true
+          
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          message: |
+            ## Coverage Report
+            
+            | Component | Coverage |
+            | --- | --- |
+            | Server | ${{ steps.codecov.outputs.server }}% |
+            | Web | ${{ steps.codecov.outputs.web }}% |
+            
+            [View detailed report on Codecov](https://codecov.io/gh/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) 
