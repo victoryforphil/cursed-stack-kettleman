@@ -1,0 +1,34 @@
+$schema: 'https://moonrepo.dev/schemas/tasks.json'
+fileGroups:
+  vite-inputs:
+  - 'vite.config.ts'
+  - 'src/**/*.{ts,tsx,js,jsx}'
+  - 'src/**/*.css'
+  - 'src/**/*.html'
+  - 'src/**/*.json'
+  - 'src/**/*.md'
+  - 'src/**/*.mdx'
+  - 'src/**/*.svelte'
+  - 'public/**/*'
+  - 'index.html'
+  - 'package.json'
+  vite-outputs:
+  - 'dist/**/*'
+  - 'public/**/*'
+  - 'index.html'
+  - 'bun.lockb'
+  - 'package-lock.json'
+  - 'package.json'
+
+tasks:
+  build:
+    options:
+      mergeInputs: append
+      mergeOutputs: append
+      mergeDeps: append
+    inputs:
+    - '@globs(vite-inputs)'
+    outputs:
+    - '@globs(vite-outputs)'
+    deps:
+    - '~:install'

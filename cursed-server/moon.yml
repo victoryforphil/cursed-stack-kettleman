@@ -10,10 +10,18 @@ project:
 tags:
 - 'prisma'
 - 'docker'
-
+env:
+  DATABASE_URL: 'postgresql://cursed_postgres:VictoryForPostgres@localhost:4152/cursed'
 tasks:
   entrypoint:
     command: './scripts/entrypoint.sh'
     toolchain: 'system'
     deps:
     - '~:install'
+
+  docker-dev:
+    deps:
+    - 'compose-full:postgres'
+    - 'compose-full:influxdb'
+    env:
+      DATABASE_URL: 'postgresql://cursed_postgres:VictoryForPostgres@localhost:4152/cursed'

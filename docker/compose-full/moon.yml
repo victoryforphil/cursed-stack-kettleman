@@ -1,0 +1,39 @@
+$schema: 'https://moonrepo.dev/schemas/tasks.json'
+
+language: "docker-compose"
+type: 'tool'
+tags:
+- 'docker-compose'
+
+project:
+  name: "compose-full"
+  description: 'Docker Compose for cursed (full)'
+
+tasks:
+  postgres:
+    command: 'docker compose -f @in(0) up -d postgres'
+    description: 'Start the postgres container'
+    toolchain: 'system'
+    inputs:
+    - '@files(docker-compose)'
+
+  influxdb:
+    command: 'docker compose -f @in(0) up -d influxdb'
+    description: 'Start the influxdb container'
+    toolchain: 'system'
+    inputs:
+    - '@files(docker-compose)'
+
+  cursed-web:
+    command: 'docker compose -f @in(0) up -d cursed-web'
+    description: 'Start the cursed-web container'
+    toolchain: 'system'
+    inputs:
+    - '@files(docker-compose)'
+
+  cursed-server:
+    command: 'docker compose -f @in(0) up -d cursed-server'
+    description: 'Start the cursed-server container'
+    toolchain: 'system'
+    inputs:
+    - '@files(docker-compose)'

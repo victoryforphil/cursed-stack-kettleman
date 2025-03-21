@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/cursed-stack-kettleman:cached
+      - node-modules:/workspaces/cursed-stack-kettleman/node_modules
+      - cursed-web-node-modules:/workspaces/cursed-stack-kettleman/cursed-web/node_modules
+      - cursed-server-node-modules:/workspaces/cursed-stack-kettleman/cursed-server/node_modules
+    command: sleep infinity
+    network_mode: service:postgres # Using network of postgres so all services can be accessed via localhost
+    user: node
+    environment:
+      - DATABASE_URL=postgresql://cursed_postgres:VictoryForPostgres@localhost:5432/cursed
+      - INFLUXDB_URL=http://localhost:8086
+      - INFLUXDB_DB=cursed
+      - INFLUXDB_USER=cursed_influxdb
+      - INFLUXDB_PASSWORD=VictoryForInfluxdb
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=cursed_postgres
+      - POSTGRES_PASSWORD=VictoryForPostgres
+      - POSTGRES_DB=cursed
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cursed"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  influxdb:
+    image: influxdb:1.8
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_DB=cursed
+      - INFLUXDB_ADMIN_USER=cursed_influxdb_admin
+      - INFLUXDB_ADMIN_PASSWORD=VictoryForInfluxdb
+      - INFLUXDB_USER=cursed_influxdb
+      - INFLUXDB_USER_PASSWORD=VictoryForInfluxdb
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    ports:
+      - "8086:8086"
+
+volumes:
+  postgres-data:
+  influxdb-data:
+  node-modules:
+  cursed-web-node-modules:
+  cursed-server-node-modules: 

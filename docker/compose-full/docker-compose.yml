@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  cursed-web:
+    build:
+      context: ../..
+      dockerfile: cursed-web/Dockerfile
+    ports:
+      - "4150:80"
+    depends_on:
+      - cursed-server
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+  cursed-server:
+    build:
+      context: ../..
+      dockerfile: cursed-server/Dockerfile
+    ports:
+      - "4151:4151"
+    environment:
+      - HTTP_PORT=4151
+      - DATABASE_URL=postgresql://cursed_postgres:VictoryForPostgres@postgres:5432/cursed
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_DB=cursed
+      - INFLUXDB_USER=cursed_influxdb
+      - INFLUXDB_PASSWORD=VictoryForInfluxdb
+    depends_on:
+      postgres:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    ports:
+      - "4152:5432"
+    environment:
+      - POSTGRES_USER=cursed_postgres
+      - POSTGRES_PASSWORD=VictoryForPostgres
+      - POSTGRES_DB=cursed
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - cursed-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cursed"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    command: ["postgres", "-c", "logging_collector=on"]
+
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "4153:8086"
+    environment:
+      - INFLUXDB_DB=cursed
+      - INFLUXDB_ADMIN_USER=cursed_influxdb_admin
+      - INFLUXDB_ADMIN_PASSWORD=VictoryForInfluxdb
+      - INFLUXDB_USER=cursed_influxdb
+      - INFLUXDB_USER_PASSWORD=VictoryForInfluxdb
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    networks:
+      - cursed-network
+    healthcheck:
+      test: ["CMD", "influx", "-execute", "SHOW DATABASES"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  otel-collector:
+    image: signoz/signoz-otel-collector:0.88.7
+    ports:
+      - "4154:4317"    # OTLP gRPC receiver (host:container)
+      - "4155:4318"    # OTLP http receiver (host:container)
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.11.2-alpine
+    ports:
+      - "4156:9000"
+      - "4157:8123"
+      - "4158:9181"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+  query-service:
+    image: signoz/query-service:0.35.1
+    ports:
+      - "4159:6060"
+    environment:
+      - ClickHouseUrl=tcp://clickhouse:9000
+    depends_on:
+      - clickhouse
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+  frontend:
+    image: signoz/frontend:0.35.1
+    ports:
+      - "4160:3301"
+    depends_on:
+      - query-service
+    networks:
+      - cursed-network
+    restart: unless-stopped
+
+networks:
+  cursed-network:
+    driver: bridge
+
+volumes:
+  clickhouse-data:
+  postgres-data:
+    driver: local
+  influxdb-data:
+    driver: local

@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Copy package files and dependencies and workspace
 COPY ./cursed-server /app/cursed-server
+COPY ./docker /app/docker
 COPY ./scripts /app/scripts
 COPY ./.moon /app/.moon
 
@@ -14,7 +15,7 @@ RUN ls -la
 # Install PostgreSQL client tools
 RUN apt update && \
     apt install -y postgresql-client && \
-    apt install -y wget curl git unzip gzip xz-utils build-essential && \
+    apt install -y wget curl git unzip gzip xz-utils&& \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
     
@@ -41,6 +42,19 @@ EXPOSE 3030
 
 # Set environment variables
 ENV NODE_ENV=production
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+
+ARG HTTP_PORT
+ENV HTTP_PORT=${HTTP_PORT}
+
+ARG INFLUXDB_URL
+ENV INFLUXDB_URL=${INFLUXDB_URL}
+
+ARG INFLUXDB_DB
+ENV INFLUXDB_DB=${INFLUXDB_DB}
+
+
 
 RUN chmod +x /app/cursed-server/scripts/entrypoint.sh
 

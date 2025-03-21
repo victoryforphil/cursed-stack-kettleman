@@ -1,0 +1,11 @@
+schema-version: v1
+
+tools:
+  moon:
+    version: latest
+  bun:
+    version: latest
+  node:
+    version: 20.11.1
+  typescript:
+    version: 5.7.3

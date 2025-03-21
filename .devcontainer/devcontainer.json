@@ -1,0 +1,29 @@
+{
+  "name": "Cursed Stack Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/cursed-stack-kettleman",
+  "forwardPorts": [
+    4150, 4151, 4152, 4153, 5432, 8086
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "moonrepo.moon-console",
+        "oven.bun-vscode",
+        "dbaeumer.vscode-eslint",
+        "prisma.prisma",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "github.copilot"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  },
+  "postCreateCommand": "proto bin-install moon && proto bin-install bun && moon run :install",
+  "remoteUser": "node"
+} 
