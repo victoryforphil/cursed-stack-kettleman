@@ -1,0 +1,46 @@
+name: Docker Compose
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  docker-compose-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Proto
+        uses: moonrepo/setup-proto@v1
+        
+      - name: Install Moon
+        run: proto install moon
+        
+      - name: Install dependencies
+        run: moon run :install
+        
+      - name: Build projects
+        run: moon run :build || echo "Build failed but continuing for Docker test"
+        continue-on-error: true
+        
+      - name: Run Docker Compose builds
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/compose-full/Dockerfile
+          push: false
+          load: true
+          tags: cursed-compose:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1 
