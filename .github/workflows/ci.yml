@@ -32,11 +32,11 @@ jobs:
         run: moon run :install
         
       - name: Test all projects
-        run: moon run :test || echo "Tests failed but continuing"
+        run: moon run :test
         continue-on-error: true
         
       - name: Build all projects
-        run: moon run :build || echo "Build failed but continuing"
+        run: moon run :build
         continue-on-error: true
       
       - name: Report Build Status

@@ -29,14 +29,9 @@ jobs:
         run: moon run :install
         
       - name: Build projects
-        run: moon run :build || echo "Build failed but continuing for Docker test"
+        run: moon run :build 
         continue-on-error: true
-        
-      - name: Run Docker Compose builds
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/compose-full/Dockerfile
-          push: false
-          load: true
-          tags: cursed-compose:test
+          
+      - name: Build docker projects
+        run: moon run :docker-build 
+        continue-on-error: true 

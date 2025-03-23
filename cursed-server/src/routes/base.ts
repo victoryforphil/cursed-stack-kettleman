@@ -129,7 +129,7 @@ export function createBaseRoute(prefix: string) {
     .derive(({ set }) => ({
       // Add helper to wrap successful responses
       wrapSuccess: <T>(content: T, message: string = ''): RestResult<T> => {
-        return makeRestResult(content, message, true, set.status || 200);
+        return makeRestResult(content, message, true, typeof set.status === 'number' ? set.status : 200);
       }
     }));
 }
