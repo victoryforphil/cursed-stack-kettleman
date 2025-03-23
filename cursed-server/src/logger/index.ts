@@ -4,7 +4,8 @@ import path from 'path';
 const { combine, timestamp, json, printf, colorize } = winston.format;
 
 // Custom format for console output
-const consoleFormat = printf(({ level, message, timestamp, ...metadata }: { level: string, message: string, timestamp: string, metadata: Record<string, any> }) => {
+const consoleFormat = printf((info) => {
+  const { level, message, timestamp, ...metadata } = info;
   const metadataStr = Object.keys(metadata).length 
     ? `\n${JSON.stringify(metadata, null, 2)}` 
     : '';
@@ -49,10 +50,13 @@ const logger = winston.createLogger({
 });
 
 // Create stream for Morgan integration
-logger.stream = {
+const loggerStream = {
   write: (message: string) => {
     logger.http(message.trim());
   }
 };
+
+// @ts-ignore - Adding a non-standard property to the logger
+logger.stream = loggerStream;
 
 export default logger; 

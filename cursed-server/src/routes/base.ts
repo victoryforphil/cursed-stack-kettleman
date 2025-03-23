@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import logger from '../logger';
 import { ServerError } from '../types/server_error';
+import { RestResult, makeRestResult, makeErrorResult } from '../types/rest';
 
 interface ValidationSchema {
   type: string;
@@ -128,7 +129,7 @@ export function createBaseRoute(prefix: string) {
     .derive(({ set }) => ({
       // Add helper to wrap successful responses
       wrapSuccess: <T>(content: T, message: string = ''): RestResult<T> => {
-        return makeRestResult(content, message, true, set.status || 200);
+        return makeRestResult(content, message, true, typeof set.status === 'number' ? set.status : 200);
       }
     }));
 }

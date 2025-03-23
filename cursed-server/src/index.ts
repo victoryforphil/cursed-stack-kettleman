@@ -5,18 +5,15 @@ import { logEntryRoutes } from './routes/log_entry';
 import { cors } from '@elysiajs/cors';
 import { opentelemetry } from '@elysiajs/opentelemetry';
 import { swagger } from '@elysiajs/swagger';
-import { jwt } from '@elysiajs/jwt';
-import { cookie } from '@elysiajs/cookie';
+
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { config } from './config';
-// Initialize clients
 
 // Create base app with state
 const app = new Elysia();
 
-// Apply plugins manually to avoid TypeScript errors
-// @ts-ignore - Suppress TypeScript errors for plugin compatibility
+// Apply plugins with improved type compatibility
 app.use(cors({
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -24,19 +21,8 @@ app.use(cors({
   credentials: true,
 }));
 
-// @ts-ignore - Suppress TypeScript errors for plugin compatibility
-app.use(swagger())
+app.use(swagger());
 
-// @ts-ignore - Suppress TypeScript errors for plugin compatibility
-app.use(jwt({
-  name: 'jwt',
-  secret: process.env.JWT_SECRET || 'super-secret-key-change-in-production',
-}));
-
-// @ts-ignore - Suppress TypeScript errors for plugin compatibility
-app.use(cookie());
-
-// @ts-ignore - Suppress TypeScript errors for plugin compatibility
 app.use(opentelemetry({
   serviceName: 'cursed-server',
   spanProcessors: [
@@ -48,18 +34,23 @@ app.use(opentelemetry({
   ],
 }));
 
-
 // Enhanced logging middleware
-app.onRequest(({ request, query, params, path }: { request: any, query: any, params: any, path: string }) => {
+app.onRequest((context) => {
+  const { request } = context;
   const method = request.method;
   const url = new URL(request.url);
   const userAgent = request.headers.get('user-agent') || '-';
+  const path = url.pathname;
+  
+  // Using empty objects as fallbacks
+  const query = {};
+  const params = {};
   
   const logData = {
     method,
     path,
-    query: Object.keys(query || {}).length > 0 ? query : undefined,
-    params: Object.keys(params || {}).length > 0 ? params : undefined,
+    query: Object.keys(query).length > 0 ? query : undefined,
+    params: Object.keys(params).length > 0 ? params : undefined,
     userAgent
   };
   

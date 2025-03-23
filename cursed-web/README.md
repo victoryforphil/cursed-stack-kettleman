@@ -1,54 +1,148 @@
-# React + TypeScript + Vite
+# Cursed Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend web application for the Cursed Stack Kettleman project, built with React, Vite, and Mantine UI.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Built with React and TypeScript
+- Vite for fast development and building
+- Mantine UI for beautiful, accessible components
+- Docker support for development and production
+- Integration with Cursed Server API
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- [Proto](https://moonrepo.dev/proto) with Bun and Moon installed
+- Node.js 18+ (for some development tools)
+- Docker (for containerized builds)
+
+### Getting Started
+
+1. Install dependencies:
+   ```bash
+   moon run :install
+   ```
+
+2. Start the development server:
+   ```bash
+   moon run cursed-web:dev
+   ```
+
+The application will be available at http://localhost:4150
+
+### Available Commands
+
+- `moon run cursed-web:dev` - Start the development server
+- `moon run cursed-web:build` - Build the production bundle
+- `moon run cursed-web:docker-build` - Build the Docker image
+- `moon run cursed-web:lint` - Run ESLint
+- `moon run cursed-web:test` - Run tests
+
+### Environment Variables
+
+Create a `.env` file in the cursed-web directory with the following variables:
+
+```env
+VITE_API_URL=http://localhost:4151
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
 ```
+cursed-web/
+├── src/
+│   ├── components/    # React components
+│   ├── pages/        # Page components
+│   ├── hooks/        # Custom React hooks
+│   ├── utils/        # Utility functions
+│   ├── types/        # TypeScript type definitions
+│   ├── styles/       # Global styles
+│   └── App.tsx       # Root component
+├── public/           # Static assets
+├── tests/            # Test files
+└── moon.yml         # Moon configuration
+```
+
+## Building for Production
+
+1. Build the production bundle:
+   ```bash
+   moon run cursed-web:build
+   ```
+
+2. Build the Docker image:
+   ```bash
+   moon run cursed-web:docker-build
+   ```
+
+## Development Guidelines
+
+### Code Style
+
+- Follow the ESLint configuration
+- Use TypeScript for type safety
+- Follow React best practices and hooks guidelines
+- Use Mantine UI components when possible
+
+### Component Structure
+
+```typescript
+// Example component structure
+import { FC } from 'react';
+import { Box } from '@mantine/core';
+
+interface MyComponentProps {
+  // Props interface
+}
+
+export const MyComponent: FC<MyComponentProps> = ({ /* props */ }) => {
+  return (
+    <Box>
+      {/* Component content */}
+    </Box>
+  );
+};
+```
+
+### State Management
+
+- Use React Context for global state
+- Use React Query for API state management
+- Keep component state minimal and focused
+
+## Testing
+
+Run the test suite:
+
+```bash
+moon run cursed-web:test
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Development Server Issues**
+   - Clear the Vite cache
+   - Check if port 4150 is available
+   - Verify all dependencies are installed
+
+2. **Build Issues**
+   - Ensure all environment variables are set
+   - Check for TypeScript errors
+   - Verify import paths
+
+3. **API Connection Issues**
+   - Verify the API server is running
+   - Check CORS configuration
+   - Validate API URL in environment variables
+
+## Contributing
+
+Please refer to the main project's README for contribution guidelines.
+
+## License
+
+This project is licensed under the terms found in the LICENSE file at the root of the repository.
