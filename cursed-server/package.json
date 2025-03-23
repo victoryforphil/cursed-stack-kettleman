@@ -22,7 +22,8 @@
     "@prisma/client": "^6.4.1",
     "adze": "^2.2.1",
     "elysia": "latest",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "cursed-web": "file:../cursed-web"
   },
   "devDependencies": {
     "bun-types": "latest",

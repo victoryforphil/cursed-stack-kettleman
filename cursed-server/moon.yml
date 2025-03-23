@@ -1,5 +1,4 @@
 language: "typescript"
-type: 'application'
 
 project:
   name: 'cursed-server'
@@ -11,7 +10,6 @@ tags:
 - 'prisma'
 - 'docker'
 
-
 tasks:
   entrypoint:
     command: './scripts/entrypoint.sh'
@@ -19,10 +17,17 @@ tasks:
     deps:
     - '~:install'
 
+  dev:
+    command: 'bun run dev'
+    deps:
+    - 'compose-full:postgres'
+    - 'compose-full:influxdb'
+    options:
+      outputStyle: 'stream'
+
   docker-dev:
     deps:
     - 'compose-full:postgres'
     - 'compose-full:influxdb'
     env:
       DATABASE_URL: 'postgresql://cursed_postgres:VictoryForPostgres@localhost:4152/cursed'
-    

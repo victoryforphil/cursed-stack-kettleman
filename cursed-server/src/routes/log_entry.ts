@@ -40,6 +40,7 @@ export const logEntryRoutes = createBaseRoute('/logs')
           };
         }
         set.status = 500;
+        logger.error('Failed to list log entries', { error });
         return { 
           success: false, 
           error: 'Failed to list log entries'
@@ -65,6 +66,7 @@ export const logEntryRoutes = createBaseRoute('/logs')
     }) => {
       try {
         const { message } = body;
+        logger.info('Creating log entry', { message });
         
         if (!message) {
           set.status = 400;

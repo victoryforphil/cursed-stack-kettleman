@@ -14,6 +14,8 @@ tasks:
     command: 'docker compose -f @in(0) up -d postgres'
     description: 'Start the postgres container'
     toolchain: 'system'
+    options:
+      outputStyle: 'stream'
     inputs:
     - '@files(docker-compose)'
 
@@ -21,6 +23,8 @@ tasks:
     command: 'docker compose -f @in(0) up -d influxdb'
     description: 'Start the influxdb container'
     toolchain: 'system'
+    options:
+      outputStyle: 'stream'
     inputs:
     - '@files(docker-compose)'
 
@@ -28,6 +32,8 @@ tasks:
     command: 'docker compose -f @in(0) up -d cursed-web'
     description: 'Start the cursed-web container'
     toolchain: 'system'
+    options:
+      outputStyle: 'stream'
     inputs:
     - '@files(docker-compose)'
 
@@ -35,5 +41,7 @@ tasks:
     command: 'docker compose -f @in(0) up -d cursed-server'
     description: 'Start the cursed-server container'
     toolchain: 'system'
+    options:
+      outputStyle: 'stream'
     inputs:
     - '@files(docker-compose)'
