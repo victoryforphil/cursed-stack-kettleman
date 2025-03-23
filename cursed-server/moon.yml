@@ -10,8 +10,8 @@ project:
 tags:
 - 'prisma'
 - 'docker'
-env:
-  DATABASE_URL: 'postgresql://cursed_postgres:VictoryForPostgres@localhost:4152/cursed'
+
+
 tasks:
   entrypoint:
     command: './scripts/entrypoint.sh'

@@ -1,3 +1,5 @@
+$schema: 'https://moonrepo.dev/schemas/tasks.json'
+
 language: "typescript"
 type: 'application'
 
@@ -10,5 +12,3 @@ project:
 tags:
 - 'docker'
 - 'vite'
-
-$schema: 'https://moonrepo.dev/schemas/tasks.json'
