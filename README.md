@@ -74,6 +74,7 @@ cursed-stack-kettleman/
 ### Global Commands (run from root)
 - `moon run :install` - Install dependencies for all projects
 - `moon run :build` - Build all projects
+- `moon run :dev` - Start all services in development mode
 - `moon run :test` - Run tests for all projects
 
 ### Backend Commands (cursed-server)
@@ -89,7 +90,7 @@ cursed-stack-kettleman/
 ### Docker Commands
 - `moon run compose-full:up` - Start all services with Docker Compose
 - `moon run compose-full:down` - Stop all services
-- `moon run compose-full:logs` - View logs from all services
+- `moon run compose-full:build` - Build all services
 
 ## CI/CD with GitHub Actions
 
@@ -97,7 +98,6 @@ This project uses GitHub Actions for continuous integration and deployment. The 
 
 ### Continuous Integration
 - **CI**: Runs tests and builds for all projects
-- **Code Coverage**: Generates and uploads test coverage reports
 
 ### Docker & Deployment
 - **Docker Build & Publish**: Builds and publishes Docker images to GitHub Container Registry
@@ -136,14 +136,3 @@ For example, for PostgreSQL:
 - Password: `VictoryForPostgres`
 - Database: `cursed`
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the terms found in the LICENSE file.

@@ -76,12 +76,6 @@ GitHub Actions workflows automate the build, test, and deployment processes.
 - Builds the development container
 - Publishes to GitHub Container Registry (ghcr.io) for non-PR events
 
-#### Code Coverage (coverage.yml)
-- Triggered on pushes to main and all pull request activities
-- Generates code coverage reports for server and web
-- Uploads coverage reports to Codecov
-- Adds coverage summary comment to pull requests
-
 ### Pull Request Handling
 
 All workflows are now configured with simplified triggers to ensure they run on any pull request:
@@ -108,5 +102,4 @@ Container images are tagged using:
 ### Required Secrets
 
 - `GITHUB_TOKEN`: Automatically provided by GitHub
-- `CODECOV_TOKEN`: Required for uploading coverage to Codecov
 ``` 
