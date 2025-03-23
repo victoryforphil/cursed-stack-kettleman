@@ -23,9 +23,6 @@ app.use(cors({
 
 app.use(swagger());
 
-
-
-
 app.use(opentelemetry({
   serviceName: 'cursed-server',
   spanProcessors: [
